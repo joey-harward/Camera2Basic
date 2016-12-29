@@ -298,9 +298,14 @@ public class Camera2BasicFragment extends Fragment
 			ByteBuffer buffer = image.getPlanes()[0].getBuffer();
 			byte[] bytes = new byte[buffer.remaining()];
 			buffer.get(bytes);
-			mOrigBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-			// scale to fit screen
+			//mOrigBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 2; // scale it down
+			options.inPreferredConfig = Bitmap.Config.RGB_565; // less memory intensive color format
+			mOrigBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+
+			// scale preview image to fit screen
 			Point size = new Point();
 			getActivity().getWindowManager().getDefaultDisplay().getSize(size);
 			int maxWidth = size.x;
